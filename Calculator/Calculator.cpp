@@ -22,21 +22,36 @@ double primary() {
 		if (t.kind != ')') std::cout << "требуется скобка ')'";
 		return d;
 	}
-	case '8': {
+	case '8': 
 		return t.value;
-	}
-	case '-': {
+	case '-': 
 		return -primary();
-	}
-	case '+': {
+	case '+':
 		return primary();
-	}
 	default:
 		std::cout << "Требуется первичне выражение!";
 	}
 }
 double term() {
-
+	double left = primary();
+	Token t = ts.get();
+	while (true) {
+		switch (t.kind) {
+		case '*':
+			left *= primary();
+			t = ts.get();
+			break;
+		case '/':
+			double d = primary();
+			if (d == 0) std::cout << "Деление на ноль!";
+			left /= d;
+			t = ts.get();
+			break;
+		default:
+			ts.putback(t);
+			return left;
+		}
+	}
 }
 double expression() {
 
