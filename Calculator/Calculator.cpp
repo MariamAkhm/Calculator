@@ -11,6 +11,7 @@ double expression();
 
 int main() {
 	setlocale(LC_ALL, "Russian");
+
 }
 
 double primary() {
@@ -54,7 +55,23 @@ double term() {
 	}
 }
 double expression() {
-
+	double left = term();
+	Token t = ts.get();
+	while (true) {
+		switch (t.kind) {
+		case '+':
+			left += term();
+			t = ts.get();
+			break;
+		case '-':
+			left -= term();
+			t = ts.get();
+			break;
+		default:
+			ts.putback(t);
+			return left;
+		}
+	}
 }
 
 
