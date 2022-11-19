@@ -3,11 +3,44 @@
 #include "Token.h"
 #include "Token_stream.h"
 
+Token_S::Token_stream ts;
+
+double primary();
+double term();
+double expression();
+
 int main() {
 	setlocale(LC_ALL, "Russian");
 }
 
+double primary() {
+	Token t = ts.get();
+	switch (t.kind) {
+	case '(': {
+		double d = expression();
+		t = ts.get();
+		if (t.kind != ')') std::cout << "требуется скобка ')'";
+		return d;
+	}
+	case '8': {
+		return t.value;
+	}
+	case '-': {
+		return -primary();
+	}
+	case '+': {
+		return primary();
+	}
+	default:
+		std::cout << "Требуется первичне выражение!";
+	}
+}
+double term() {
 
+}
+double expression() {
+
+}
 
 
 

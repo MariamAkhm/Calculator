@@ -38,6 +38,12 @@ namespace Token_S {
 			std::cout << "Неверная лексема!";
 		}
 	}
+	void Token_stream::putback(Token t) {
+		if (full)
+			std::cout << "putback(): буфер заполнен!";
+		buffer = t;
+		full = true;
+	}
 	void Token_stream::ignore(char c) {
 		if (full && c == buffer.kind)
 			full = false;
