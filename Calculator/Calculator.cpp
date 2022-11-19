@@ -4,14 +4,19 @@
 #include "Token_stream.h"
 
 Token_S::Token_stream ts;
-
+const std::string prompt = "> ";
+const std::string result = "= ";
+const char quit = 'q';
+const char print = ';';
+const char number = '8';
 double primary();
 double term();
 double expression();
+void calculate();
 
 int main() {
 	setlocale(LC_ALL, "Russian");
-
+	calculate();
 }
 
 double primary() {
@@ -71,6 +76,16 @@ double expression() {
 			ts.putback(t);
 			return left;
 		}
+	}
+}
+void calculate() {
+	while (std::cin) {
+		std::cout << prompt;
+		Token t = ts.get();
+		while (t.kind == print) t = ts.get();
+		if (t.kind == quit) return;
+		ts.putback(t);
+		std::cout << result << expression() << '\n';
 	}
 }
 

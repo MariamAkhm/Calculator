@@ -7,8 +7,6 @@ namespace Token_S {
 	const char quit = 'q';
 	const char print = ';';
 	const char number = '8';
-	const std::string prompt = "> ";
-	const std::string result = "= ";
 	Token Token_stream::get() {
 		if (full) {
 			full = false;
