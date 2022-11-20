@@ -1,4 +1,2 @@
-//#include "Token.h"
-//class Token_stream {
-//	
-//};
+#include"Token.h"
+
