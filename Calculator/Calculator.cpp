@@ -132,30 +132,17 @@
 #include "std_lib_facilities.h"
 using namespace std;
 
-// class Token_stream; // member functionss : putback(), get() 
-// class Token;        // Token class, member varaibles : kind, value;
-double expression();   // Exp = Exp or Exp + Term or Exp - term
-double term();         // Term = Term or Term * Primary or Term / Primary
-double primary();      // Primary = '(' or Number ; Number = double precision number;
-//void error(string);  // Throw errors
-
-
-//error
-void error(string st)
-{
-    throw runtime_error(st);
-}
+double expression();   
+double term();         
+double primary();     
 
 class Token
 {
 public:
     char kind;
-    double value;
-    // Constructor for operators  
+    double value; 
     Token(char ch)
-        :kind(ch) {} //empty function.
-
-    //constructor for operands
+        :kind(ch) {} 
     Token(char ch, double val)
         :kind(ch), value(val) {}
 };
@@ -163,34 +150,32 @@ public:
 class Token_stream
 {
 private:
-    bool full;      // flag for buffer status, empty or full
-    Token buffer;   // buffer stores only one token
+    bool full;      
+    Token buffer;   
 public:
     Token_stream() :full(false), buffer(0) {};
     Token get();
     void putback(Token t);
+    void ignore(char с);
 
 };
 
-// save the character which we read and is not used by the respeceted function.
+
 void Token_stream::putback(Token t)
 {
     if (full) error("putback() into a full buffer.");
-    buffer = t;         //copy t to buffer
-    full = true;        //buffer is now full
+    buffer = t;         
+    full = true;        
 }
 
-// input character and create Tokens out of it.
 Token Token_stream::get()
 {
-    if (full) {   // check if we have a token already.
-        //remove token from buffer
+    if (full) {   
         full = false;
         return buffer;
     }
-    // if buffer is empty
     char ch;
-    cin >> ch;       // reading new token
+    cin >> ch;       
     switch (ch)
     {
     case ';':
@@ -215,7 +200,7 @@ Token Token_stream::get()
     case '7':
     case '8':
     case '9':
-        cin.putback(ch); // because we have read a digit (as a character for comparision purpose) which is part of the upcoming stream of digits, so we put it back so we can read it again.
+        cin.putback(ch); 
         double val;
         cin >> val;
         return Token('8', val);
@@ -225,22 +210,69 @@ Token Token_stream::get()
         break;
     }
 }
-
-// Token_stream object
-Token_stream ts;
-int main()
-{
-    double val = 0;
-    while (cin) {
-        Token t = ts.get();
-        if (t.kind == 'q') break;                       // Press q to quit
-        if (t.kind == ';') cout << "=" << val << endl;   // Press ; to end expression
-        else ts.putback(t);
-        val = expression();
-    }
+void Token_stream::ignore(char c) {
+    if (full && c == buffer.kind)
+        full = false;
+    return;
+    full = false;
+    char ch = 0;
+    while (std::cin >> ch)
+        if (ch == c) return;
 }
 
-// Primary
+Token_stream ts;
+const std::string prompt = "> ";
+const std::string result = "= ";
+const char quit = 'q';
+const char print = ';';
+const char number = '8';
+
+void clean_up_mess()
+{
+    ts.ignore(print);
+}
+void calculate()
+{
+    try
+    {
+        while (std::cin)
+        {
+            std::cout << prompt;
+            Token t = ts.get();
+            while (t.kind == print) t = ts.get();
+            if (t.kind == quit) return;
+            ts.putback(t);
+            std::cout << result << expression() << '\n';
+        }
+    }
+    catch (exception& e)
+    {
+        cerr << e.what() << '\n';
+        clean_up_mess();
+    }
+
+}
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+    try
+    {
+        calculate();
+        return 0;
+    }
+    catch (runtime_error& e)
+    {
+        cerr << e.what() << endl;
+        return 1;
+    }
+    catch (...)
+    {
+        cerr << "исключение \n";
+        return 2;
+    }
+
+}
+
 double primary()
 {
     Token t = ts.get();
@@ -265,7 +297,6 @@ double primary()
 
 }
 
-// Term
 double term()
 {
     double left = primary();
@@ -292,7 +323,6 @@ double term()
 
 }
 
-// Expression
 double expression()
 {
     double left = term();
@@ -313,6 +343,4 @@ double expression()
         }
     }
 }
-
-// execution starts from her
 
