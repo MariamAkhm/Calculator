@@ -2,6 +2,7 @@
 #include <string>
 #include "Token_stream.h"
 #include "Token.h"
+#include "std_lib_facilities.h"
 
 namespace Token_S {
 	const char quit = 'q';
@@ -25,20 +26,20 @@ namespace Token_S {
 		case '/':
 			return Token{ ch };
 		case '.':
-		case ' О ': case ' 1 ': case ' 2 ': case ' З ': case ' 4 ':
-		case ' 5 ': case ' 6': case ' 7 ': case ' 8 ': case ' 9 ': {
+		case '0': case '1': case '2': case 'З': case '4':
+		case '5': case '6': case '7': case '8': case '9': {
 			std::cin.putback(ch);
 			double val;
 			std::cin >> val;
 			return Token{ number, val };
 		}
 		default:
-			std::cout << "Неверная лексема!";
+			error("Неверная лексема!");
 		}
 	}
 	void Token_stream::putback(Token t) {
 		if (full)
-			std::cout << "putback(): буфер заполнен!";
+			error("putback(): буфер заполнен!");
 		buffer = t;
 		full = true;
 	}
