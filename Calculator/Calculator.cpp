@@ -55,7 +55,7 @@ int main()
     }
     catch (...)
     {
-        cerr << "исключение \n";
+        cerr << "Исключение \n";
         return 2;
     }
 
@@ -69,7 +69,7 @@ double primary()
     {
         double d = expression();
         t = ts.get();
-        if (t.kind != ')') error("')' expected");
+        if (t.kind != ')') error("Ожидалась ')'");
         return d;
     }
     case '8':
@@ -80,7 +80,7 @@ double primary()
     case '+':
         return primary();
     default:
-        error("primary expected");
+        error("Требуется первичное выражение!");
     }
 
 }
@@ -98,7 +98,7 @@ double term()
         case '/':
         {
             double d = primary();
-            if (d == 0) error("divided by zero");
+            if (d == 0) error("Деление на ноль!");
             left /= d;
             t = ts.get();
             break;

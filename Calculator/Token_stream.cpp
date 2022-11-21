@@ -7,7 +7,7 @@
 
 	void Token_stream::putback(Token t)
 {
-    if (full) error("putback() into a full buffer.");
+    if (full) error("putback() контейнер заполнен!");
     buffer = t;
     full = true;
 }
@@ -50,7 +50,7 @@ Token Token_stream::get()
         return Token('8', val);
 
     default:
-        error("Bad Token");
+        error("Ќеверна€ лексема!");
         break;
     }
 }
