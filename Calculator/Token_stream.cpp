@@ -5,23 +5,20 @@
 #include "std_lib_facilities.h"
 
 
-	void Token_stream::putback(Token t)
-{
-    if (full) error("putback() контейнер заполнен!");
+void Token_stream::putback(Token t) {
+   if (full) error("putback() контейнер заполнен!");
     buffer = t;
     full = true;
 }
 
-Token Token_stream::get()
-{
+Token Token_stream::get() {
     if (full) {
         full = false;
         return buffer;
     }
     char ch;
     cin >> ch;
-    switch (ch)
-    {
+    switch (ch) {
     case ';':
     case 'q':
     case '(':
@@ -48,7 +45,6 @@ Token Token_stream::get()
         double val;
         cin >> val;
         return Token('8', val);
-
     default:
         error("Неверная лексема!");
         break;

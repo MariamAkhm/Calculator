@@ -1,73 +1,63 @@
 ﻿#include <iostream>
 #include <vector>
+#include <string>
 #include "Token.h"
 #include "Token_stream.h"
+#include "Calculator.h"
 #include "std_lib_facilities.h"
 
-double expression();   
-double term();         
-double primary();     
-
 Token_stream ts;
+Token tn = ts.get();
+Calculator it;
 const std::string prompt = "> ";
 const std::string result = "= ";
 const char quit = 'q';
 const char print = ';';
 const char number = '8';
 
-void clean_up_mess()
-{
+void clean_up_mess() {
     ts.ignore(print);
 }
-void calculate()
-{
-    try
-    {
-        while (std::cin)
-        {
+void calculate() {
+    try {
+        while (std::cin) {
             std::cout << prompt;
             Token t = ts.get();
             while (t.kind == print) t = ts.get();
-            if (t.kind == quit) return;
+            if (t.kind == quit)
+                return;
             ts.putback(t);
-            std::cout << result << expression() << '\n';
+            double res = it.expression(t);
+            std::cout << result << res << '\n';
         }
     }
-    catch (exception& e)
-    {
+    catch (exception& e) {
         cerr << e.what() << '\n';
         clean_up_mess();
     }
 
 }
-int main()
-{
+int main() {
     setlocale(LC_ALL, "Russian");
-    try
-    {
+    try {
         calculate();
         return 0;
     }
-    catch (runtime_error& e)
-    {
+    catch (runtime_error& e) {
         cerr << e.what() << endl;
         return 1;
     }
-    catch (...)
-    {
+    catch (...) {
         cerr << "Исключение \n";
         return 2;
     }
-
 }
 
-double primary()
-{
-    Token t = ts.get();
+double Calculator::primary(Token t) {
+    t = ts.get();
     switch (t.kind) {
-    case '(':
-    {
-        double d = expression();
+    case '(': {
+        double d = expression(tn);
         t = ts.get();
         if (t.kind != ')') error("Ожидалась ')'");
         return d;
@@ -76,28 +66,26 @@ double primary()
         return t.value;
         break;
     case '-':
-        return -primary();
+        return -primary(t);
     case '+':
-        return primary();
+        return primary(t);
     default:
         error("Требуется первичное выражение!");
     }
 
 }
 
-double term()
-{
-    double left = primary();
-    Token t = ts.get();
+double Calculator::term(Token t) {
+    double left = primary(t);
+    t = ts.get();
     while (true) {
         switch (t.kind) {
         case '*':
-            left *= primary();
+            left *= primary(t);
             t = ts.get();
             break;
-        case '/':
-        {
-            double d = primary();
+        case '/': {
+            double d = primary(t);
             if (d == 0) error("Деление на ноль!");
             left /= d;
             t = ts.get();
@@ -111,18 +99,17 @@ double term()
 
 }
 
-double expression()
-{
-    double left = term();
-    Token t = ts.get();
+double Calculator::expression(Token t) {
+    double left = term(t);
+    t = ts.get();
     while (true) {
         switch (t.kind) {
         case '+':
-            left += term();
+            left += term(t);
             t = ts.get();
             break;
         case '-':
-            left -= term();
+            left -= term(t);
             t = ts.get();
             break;
         default:
@@ -131,4 +118,5 @@ double expression()
         }
     }
 }
+
 
