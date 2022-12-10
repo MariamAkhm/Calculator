@@ -140,7 +140,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Calculator.cpp" />
-    <ClCompile Include="Test.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="Token_stream.cpp" />
   </ItemGroup>
