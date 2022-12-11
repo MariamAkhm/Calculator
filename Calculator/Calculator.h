@@ -5,8 +5,8 @@
 class Calculator
 {
 public:
-	double expression(Token t);
-	double term(Token t);
-	double primary(Token t);
+	double expression();
+	double term();
+	double primary();
 };
 

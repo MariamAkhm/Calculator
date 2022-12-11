@@ -7,7 +7,6 @@
 #include "std_lib_facilities.h"
 
 Token_stream ts;
-Token tn = ts.get();
 Calculator it;
 const std::string prompt = "> ";
 const std::string result = "= ";
@@ -27,7 +26,7 @@ void calculate() {
             if (t.kind == quit)
                 return;
             ts.putback(t);
-            double res = it.expression(t);
+            double res = it.expression();
             std::cout << result << res << '\n';
         }
     }
@@ -53,11 +52,11 @@ int main() {
     }
 }
 
-double Calculator::primary(Token t) {
-    t = ts.get();
+double Calculator::primary() {
+   Token t = ts.get();
     switch (t.kind) {
     case '(': {
-        double d = expression(tn);
+        double d = expression();
         t = ts.get();
         if (t.kind != ')') error("Ожидалась ')'");
         return d;
@@ -66,26 +65,26 @@ double Calculator::primary(Token t) {
         return t.value;
         break;
     case '-':
-        return -primary(t);
+        return -primary();
     case '+':
-        return primary(t);
+        return primary();
     default:
         error("Требуется первичное выражение!");
     }
 
 }
 
-double Calculator::term(Token t) {
-    double left = primary(t);
-    t = ts.get();
+double Calculator::term() {
+    double left = primary();
+    Token t = ts.get();
     while (true) {
         switch (t.kind) {
         case '*':
-            left *= primary(t);
+            left *= primary();
             t = ts.get();
             break;
         case '/': {
-            double d = primary(t);
+            double d = primary();
             if (d == 0) error("Деление на ноль!");
             left /= d;
             t = ts.get();
@@ -99,17 +98,17 @@ double Calculator::term(Token t) {
 
 }
 
-double Calculator::expression(Token t) {
-    double left = term(t);
-    t = ts.get();
+double Calculator::expression() {
+    double left = term();
+    Token t = ts.get();
     while (true) {
         switch (t.kind) {
         case '+':
-            left += term(t);
+            left += term();
             t = ts.get();
             break;
         case '-':
-            left -= term(t);
+            left -= term();
             t = ts.get();
             break;
         default:
