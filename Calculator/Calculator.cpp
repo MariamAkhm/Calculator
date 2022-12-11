@@ -17,7 +17,7 @@ const char number = '8';
 void clean_up_mess() {
     ts.ignore(print);
 }
-void calculate() {
+void Calculator::calculate() {
     try {
         while (std::cin) {
             std::cout << prompt;
@@ -39,7 +39,7 @@ void calculate() {
 int main() {
     setlocale(LC_ALL, "Russian");
     try {
-        calculate();
+        it.calculate();
         return 0;
     }
     catch (runtime_error& e) {

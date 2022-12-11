@@ -5,6 +5,7 @@
 class Calculator
 {
 public:
+	void calculate();
 	double expression();
 	double term();
 	double primary();
