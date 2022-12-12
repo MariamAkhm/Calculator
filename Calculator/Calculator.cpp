@@ -1,6 +1,6 @@
 ﻿#include <iostream>
-#include <vector>
 #include <string>
+#include <sstream>
 #include "Token.h"
 #include "Token_stream.h"
 #include "Calculator.h"
@@ -13,33 +13,35 @@ const std::string result = "= ";
 const char quit = 'q';
 const char print = ';';
 const char number = '8';
+std::string str_stream{};
 
 void clean_up_mess() {
     ts.ignore(print);
 }
-void Calculator::calculate() {
+double Calculator::calculate(const std::string& s) {
+    std::stringstream str_stream{s};
     try {
-        while (std::cin) {
+        while (str_stream) {
             std::cout << prompt;
             Token t = ts.get();
             while (t.kind == print) t = ts.get();
             if (t.kind == quit)
-                return;
+                return 0;
             ts.putback(t);
             double res = it.expression();
-            std::cout << result << res << '\n';
+            return res;
         }
     }
     catch (exception& e) {
         cerr << e.what() << '\n';
         clean_up_mess();
+        return 0;
     }
-
 }
 int main() {
     setlocale(LC_ALL, "Russian");
     try {
-        it.calculate();
+        std::cout<<it.calculate(str_stream);
         return 0;
     }
     catch (runtime_error& e) {
