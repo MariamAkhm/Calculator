@@ -13,24 +13,22 @@ const std::string result = "= ";
 const char quit = 'q';
 const char print = ';';
 const char number = '8';
-std::string str_stream{};
 
 void clean_up_mess() {
     ts.ignore(print);
 }
-double Calculator::calculate(const std::string& s) {
-    std::stringstream str_stream{s};
+double Calculator::calculate(Token t) {
+   //std::stringstream str_stream{s};
+    //const std::string& s
     try {
-        while (str_stream) {
             std::cout << prompt;
-            Token t = ts.get();
+            //Token t = ts.get();
             while (t.kind == print) t = ts.get();
             if (t.kind == quit)
                 return 0;
             ts.putback(t);
             double res = it.expression();
             return res;
-        }
     }
     catch (exception& e) {
         cerr << e.what() << '\n';
@@ -40,8 +38,10 @@ double Calculator::calculate(const std::string& s) {
 }
 int main() {
     setlocale(LC_ALL, "Russian");
+    //std::stringstream str_stream{ };
+    Token t = ts.get();
     try {
-        std::cout<<it.calculate(str_stream);
+        std::cout<<it.calculate(t);
         return 0;
     }
     catch (runtime_error& e) {

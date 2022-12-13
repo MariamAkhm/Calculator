@@ -1,9 +1,10 @@
 #include "pch.h"
 
 TEST(Plus_minus_tests, Positive_expession) {
-	std::string str_stream{};
-	str_stream = '4+5';
-	EXPECT_EQ(Calculator::calculate(str_stream), 9);
+	Calculator calc;
+	Token_stream it;
+	
+	EXPECT_EQ(calc.calculate(str_stream), 9);
   EXPECT_TRUE(true);
 }
 TEST(Plus_minus_tests, Negative_expession) {

@@ -6,7 +6,7 @@
 class Calculator
 {
 public:
-	double calculate(const std::string& s);
+	double calculate(Token t);
 	double expression();
 	double term();
 	double primary();
