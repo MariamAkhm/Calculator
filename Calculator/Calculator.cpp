@@ -18,11 +18,8 @@ void clean_up_mess() {
     ts.ignore(print);
 }
 double Calculator::calculate(Token t) {
-   //std::stringstream str_stream{s};
-    //const std::string& s
     try {
             std::cout << prompt;
-            //Token t = ts.get();
             while (t.kind == print) t = ts.get();
             if (t.kind == quit)
                 return 0;
@@ -38,7 +35,6 @@ double Calculator::calculate(Token t) {
 }
 int main() {
     setlocale(LC_ALL, "Russian");
-    //std::stringstream str_stream{ };
     Token t = ts.get();
     try {
         std::cout<<it.calculate(t);
